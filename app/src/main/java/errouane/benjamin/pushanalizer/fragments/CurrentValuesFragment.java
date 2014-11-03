@@ -2,7 +2,6 @@ package errouane.benjamin.pushanalizer.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +10,10 @@ import android.widget.TextView;
 import errouane.benjamin.pushanalizer.R;
 import errouane.benjamin.pushanalizer.ViewPagerFragment;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
-import errouane.benjamin.pushanalizer.dataListener.RotationDataListener;
 
 
 public class CurrentValuesFragment extends ViewPagerFragment {
-    private float currentSpeed = 1f;
     private TextView speedText;
-    private String description;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,8 +28,15 @@ public class CurrentValuesFragment extends ViewPagerFragment {
     }
 
     @Override
-    public void newRotationData(RotationDataEvent event) {
-        speedText.setText(Float.toString(event.getRotationSpeed()));
+    public void newRotationData(final RotationDataEvent event) {
+        if(isAdded()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    speedText.setText(Float.toString(event.getRotationSpeed()));
+                }
+            });
+        }
     }
 
     @Override

@@ -11,7 +11,6 @@ import android.bluetooth.BluetoothProfile;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -108,12 +107,12 @@ public class MainTabbedActivity extends FragmentActivity {
 
                 @Override
                 public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-                    /*int[] accelerometer = new int[3];
+                    int[] accelerometer = new int[3];
                     accelerometer[0] = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 0);
                     accelerometer[1] = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 2);
                     accelerometer[2] = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 4);
                     int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 6);
-                    //updateSpeed(data);*/
+                    updateSpeed(data);
                 }
             });
             gatt.discoverServices();
@@ -174,7 +173,7 @@ public class MainTabbedActivity extends FragmentActivity {
         speed = (speed * 10) / 10f;
 
         for(ViewPagerFragment f : fragments) {
-            //f.newRotationData(new RotationDataEvent(0f, speed));
+            f.newRotationData(new RotationDataEvent(0f, speed));
         }
     }
 }
