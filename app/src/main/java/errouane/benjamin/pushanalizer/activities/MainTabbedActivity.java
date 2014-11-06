@@ -38,6 +38,7 @@ public class MainTabbedActivity extends FragmentActivity {
     private BluetoothGatt gatt;
     private float diameter;
     private UUID PushAnalyzerUuid = UUID.fromString("00002000-0000-1000-8000-00805f9b34fb");
+    private long lastDataTime = 0;
 
     private ViewPagerFragment[] fragments;
 
@@ -170,10 +171,20 @@ public class MainTabbedActivity extends FragmentActivity {
 
     private void updateSpeed(float speed) {
         speed = (float) Common.rotationalSpeedToSpeed(speed, diameter);
-        speed = (speed * 10) / 10f;
+        speed = (int)(speed * 10) / 10f;
+
+        float deltaTime = 0;
+        long now = System.currentTimeMillis();
+        if(lastDataTime != 0) {
+            long deltaTimeLong = now - lastDataTime;
+            deltaTime = deltaTimeLong / 1000f;
+        }
+        lastDataTime = now;
+
+
 
         for(ViewPagerFragment f : fragments) {
-            f.newRotationData(new RotationDataEvent(0f, speed));
+            f.newRotationData(new RotationDataEvent(deltaTime, speed));
         }
     }
 }
