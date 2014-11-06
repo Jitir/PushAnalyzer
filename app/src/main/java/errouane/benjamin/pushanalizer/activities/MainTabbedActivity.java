@@ -169,9 +169,9 @@ public class MainTabbedActivity extends FragmentActivity {
         diameter = Float.parseFloat(PreferenceManager.getDefaultSharedPreferences(this).getString("wheelDiameter", "60"));
     }
 
-    private void updateSpeed(float speed) {
-        speed = (float) Common.rotationalSpeedToSpeed(speed, diameter);
-        speed = (int)(speed * 10) / 10f;
+    private void updateSpeed(float rotationSpeed) {
+        float speed = (float) Common.rotationalSpeedToSpeed(rotationSpeed, diameter);
+        //speed = (int)(speed * 10) / 10f;
 
         float deltaTime = 0;
         long now = System.currentTimeMillis();
@@ -181,10 +181,10 @@ public class MainTabbedActivity extends FragmentActivity {
         }
         lastDataTime = now;
 
-
+        float distance = deltaTime * speed / 1200f;
 
         for(ViewPagerFragment f : fragments) {
-            f.newRotationData(new RotationDataEvent(deltaTime, speed));
+            f.newRotationData(new RotationDataEvent(deltaTime, rotationSpeed, speed, distance));
         }
     }
 }

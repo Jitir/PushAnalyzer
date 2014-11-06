@@ -13,7 +13,8 @@ import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 
 
 public class CurrentValuesFragment extends ViewPagerFragment {
-    private TextView speedText;
+    private TextView speedText, distanceText;
+    private float distance = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class CurrentValuesFragment extends ViewPagerFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_current_values, container, false);
         speedText = (TextView) view.findViewById(R.id.speedTextView);
+        distanceText = (TextView) view.findViewById(R.id.distanceTextView);
         return view;
     }
 
@@ -33,7 +35,9 @@ public class CurrentValuesFragment extends ViewPagerFragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    speedText.setText(Float.toString(event.getRotationSpeed()));
+                    speedText.setText(Float.toString((int)(event.getSpeed() * 10) / 10f));
+                    distance += event.getDistance();
+                    distanceText.setText(Integer.toString((int)(distance * 1000f)));
                 }
             });
         }
