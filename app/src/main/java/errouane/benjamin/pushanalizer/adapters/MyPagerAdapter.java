@@ -1,17 +1,11 @@
 package errouane.benjamin.pushanalizer.adapters;
 
 
-import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import errouane.benjamin.pushanalizer.R;
-import errouane.benjamin.pushanalizer.ViewPagerFragment;
-import errouane.benjamin.pushanalizer.fragments.CurrentValuesFragment;
-import errouane.benjamin.pushanalizer.fragments.GraphsFragment;
-import errouane.benjamin.pushanalizer.fragments.MoreStatsFragment;
+import errouane.benjamin.pushanalizer.fragments.ViewPagerFragment;
 
 /**
  * Created by Benni on 29.10.2014.

@@ -1,17 +1,13 @@
 package errouane.benjamin.pushanalizer.fragments;
 
-import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import errouane.benjamin.pushanalizer.R;
-import errouane.benjamin.pushanalizer.ViewPagerFragment;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
-import errouane.benjamin.pushanalizer.dataListener.RotationDataListener;
 
 
 public class MoreStatsFragment extends ViewPagerFragment {

@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.UUID;
 
 import errouane.benjamin.pushanalizer.Common;
-import errouane.benjamin.pushanalizer.ViewPagerFragment;
+import errouane.benjamin.pushanalizer.Session;
+import errouane.benjamin.pushanalizer.fragments.ViewPagerFragment;
 import errouane.benjamin.pushanalizer.adapters.MyPagerAdapter;
 import errouane.benjamin.pushanalizer.R;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
@@ -39,6 +40,7 @@ public class MainTabbedActivity extends FragmentActivity {
     private float diameter;
     private UUID PushAnalyzerUuid = UUID.fromString("00002000-0000-1000-8000-00805f9b34fb");
     private long lastDataTime = 0;
+    private Session session = new Session();
 
     private ViewPagerFragment[] fragments;
 
@@ -182,6 +184,9 @@ public class MainTabbedActivity extends FragmentActivity {
         lastDataTime = now;
 
         float distance = deltaTime * speed / 1200f;
+
+        session.addDistance(distance);
+        session.addDuration(deltaTime);
 
         for(ViewPagerFragment f : fragments) {
             f.newRotationData(new RotationDataEvent(deltaTime, rotationSpeed, speed, distance));

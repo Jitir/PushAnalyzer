@@ -1,6 +1,5 @@
-package errouane.benjamin.pushanalizer;
+package errouane.benjamin.pushanalizer.fragments;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 
 import errouane.benjamin.pushanalizer.dataListener.RotationDataListener;
