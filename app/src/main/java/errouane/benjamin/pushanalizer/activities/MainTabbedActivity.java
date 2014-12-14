@@ -40,7 +40,7 @@ public class MainTabbedActivity extends FragmentActivity {
     private float diameter;
     private UUID PushAnalyzerUuid = UUID.fromString("00002000-0000-1000-8000-00805f9b34fb");
     private long lastDataTime = 0;
-    private Session session = new Session();
+    private Session session = Session.getInstance();
 
     private ViewPagerFragment[] fragments;
 

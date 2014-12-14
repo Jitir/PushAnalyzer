@@ -13,6 +13,7 @@ public class Session {
     private List<Float> speeds = new ArrayList<Float>();
     private List<Float> times = new ArrayList<Float>();
 
+    private Session() {}
 
     public List<Float> getTimes() {
         return times;
@@ -52,5 +53,13 @@ public class Session {
 
     public void addPush() {
         pushes++;
+    }
+
+    private static Session instance;
+    public static Session getInstance() {
+        if(instance == null)
+            instance = new Session();
+
+        return instance;
     }
 }

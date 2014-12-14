@@ -12,19 +12,18 @@ import com.androidplot.xy.XYPlot;
 
 import errouane.benjamin.pushanalizer.R;
 import errouane.benjamin.pushanalizer.Session;
+import errouane.benjamin.pushanalizer.activities.MainTabbedActivity;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 import errouane.benjamin.pushanalizer.fragments.graph.PlotSeries;
 
 
 public class GraphsFragment extends ViewPagerFragment {
     private XYPlot plot;
-    private Session session;
     private float time = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -32,7 +31,6 @@ public class GraphsFragment extends ViewPagerFragment {
         View view = inflater.inflate(R.layout.fragment_graphs, container, false);
         plot = (XYPlot) view.findViewById(R.id.plot);
 
-        session = new Session();
         PlotSeries series = new PlotSeries(session, PlotSeries.ValueType.SPEED);
 
         // Create a formatter to use for drawing a series using LineAndPointRenderer
@@ -48,7 +46,8 @@ public class GraphsFragment extends ViewPagerFragment {
         session.getTimes().add(time);
         session.getSpeeds().add(event.getSpeed());
         time += event.getDeltaTime();
-        plot.redraw();
+        if(plot != null)
+            plot.redraw();
     }
 
     @Override
