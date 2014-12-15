@@ -55,11 +55,50 @@ public class Session {
         pushes++;
     }
 
+    public void reset() {
+        duration = 0;
+        distance = 0;
+        pushes = 0;
+        speeds.clear();
+        times.clear();
+    }
+
     private static Session instance;
     public static Session getInstance() {
         if(instance == null)
             instance = new Session();
 
         return instance;
+    }
+
+    public String toReadableString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Duration: ");
+        sb.append(duration);
+        sb.append("\nDistance: ");
+        sb.append(distance);
+        sb.append("\nPushes: ");
+        sb.append(pushes);
+        sb.append("\n\nData (Time, Speed):");
+
+        for(int i = 0; i < speeds.size(); i++) {
+            sb.append("\n");
+            sb.append(times.get(i));
+            sb.append("\t");
+            sb.append(speeds.get(i));
+        }
+
+        return sb.toString();
+    }
+
+    public String toBinaryString() {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < speeds.size(); i++) {
+            sb.append(times.get(i));
+            sb.append("\t");
+            sb.append(speeds.get(i));
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

@@ -11,5 +11,9 @@
     <string name="tab_current_values">Current Values</string>
     <string name="tab_more_stats">More Stats</string>
     <string name="tab_graphs">Graphs</string>
+    <string name="reset">Reset</string>
+    <string name="save">Save</string>
+    <string name="sd_card_unavailable">The SD-Card is not available!</string>
+    <string name="load_data">Load</string>
 
 </resources>

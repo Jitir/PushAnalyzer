@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +24,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import errouane.benjamin.pushanalizer.Common;
 import errouane.benjamin.pushanalizer.R;
 
 
@@ -34,9 +41,11 @@ public class MainActivity extends Activity {
     private ListView deviceList;
     private ProgressBar bar;
     private StopScanning stopper;
-    private Button scanButton, activityButton;
+    private Button scanButton, loadDataButton;
     private ArrayAdapter<BluetoothDevice> adapter;
     private List<BluetoothDevice> foundDevices;
+
+    private static final int FILE_CHOOSER_CODE = 0;
 
     public MainActivity() {
     }
@@ -88,12 +97,11 @@ public class MainActivity extends Activity {
             }
         });
 
-        activityButton = (Button) findViewById(R.id.startVis);
-        activityButton.setOnClickListener(new View.OnClickListener() {
+        loadDataButton = (Button) findViewById(R.id.loadData);
+        loadDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, MainTabbedActivity.class);
-                startActivity(intent);
+                loadFile();
             }
         });
 
@@ -107,6 +115,46 @@ public class MainActivity extends Activity {
         // Initializes Bluetooth adapter.
         final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
+    }
+
+    private void loadFile() {
+        if(!Common.isExternalStorageAvailable(this)) {
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        //intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try{
+            startActivityForResult(Intent.createChooser(intent, "Select a file to load"), FILE_CHOOSER_CODE);
+        } catch(ActivityNotFoundException ex) {
+            Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_SHORT).show();
+        }
+
+
+        //File file;
+//
+       // Intent intent = new Intent(MainActivity.this, MainTabbedActivity.class);
+        //intent.putExtra(String.class.getName(), file);
+       // startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case FILE_CHOOSER_CODE:
+                if(data == null)
+                    return;
+
+                Uri uri = data.getData();
+
+                Intent intent = new Intent(MainActivity.this, MainTabbedActivity.class);
+                intent.putExtra(String.class.toString(), uri.toString());
+                startActivity(intent);
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void scan() {

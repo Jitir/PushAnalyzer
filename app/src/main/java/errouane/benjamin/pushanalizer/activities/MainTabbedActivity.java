@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -19,11 +20,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
 import errouane.benjamin.pushanalizer.Common;
 import errouane.benjamin.pushanalizer.Session;
+import errouane.benjamin.pushanalizer.Simulator;
 import errouane.benjamin.pushanalizer.fragments.ViewPagerFragment;
 import errouane.benjamin.pushanalizer.adapters.MyPagerAdapter;
 import errouane.benjamin.pushanalizer.R;
@@ -41,6 +44,7 @@ public class MainTabbedActivity extends FragmentActivity {
     private UUID PushAnalyzerUuid = UUID.fromString("00002000-0000-1000-8000-00805f9b34fb");
     private long lastDataTime = 0;
     private Session session = Session.getInstance();
+    private Simulator simulator;
 
     private ViewPagerFragment[] fragments;
 
@@ -54,13 +58,13 @@ public class MainTabbedActivity extends FragmentActivity {
         fragments[1] = new CurrentValuesFragment();
         fragments[2] = new GraphsFragment();
 
-        device = getIntent().getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
         adapter = new MyPagerAdapter(getSupportFragmentManager(), fragments);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
 
-
+        device = getIntent().getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         if(device != null) {
             gatt = device.connectGatt(this, false, new BluetoothGattCallback() {
 
@@ -119,6 +123,17 @@ public class MainTabbedActivity extends FragmentActivity {
                 }
             });
             gatt.discoverServices();
+        } else {
+            String filePath = getIntent().getStringExtra(String.class.toString());
+
+            Uri uri = Uri.parse(filePath);
+            File file = new File(uri.getPath());
+            if(file == null || !file.exists())
+                finish();
+
+
+            simulator = new Simulator(this, file);
+            new Thread(simulator).start();
         }
     }
 
@@ -155,6 +170,8 @@ public class MainTabbedActivity extends FragmentActivity {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         closeConnection();
                         MainTabbedActivity.this.finish();
+                        if(simulator != null)
+                            simulator.stopThread();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -171,10 +188,7 @@ public class MainTabbedActivity extends FragmentActivity {
         diameter = Float.parseFloat(PreferenceManager.getDefaultSharedPreferences(this).getString("wheelDiameter", "60"));
     }
 
-    private void updateSpeed(float rotationSpeed) {
-        float speed = (float) Common.rotationalSpeedToSpeed(rotationSpeed, diameter);
-        //speed = (int)(speed * 10) / 10f;
-
+    public void updateRealSpeed(float speed, float rotationSpeed) {
         float deltaTime = 0;
         long now = System.currentTimeMillis();
         if(lastDataTime != 0) {
@@ -191,5 +205,9 @@ public class MainTabbedActivity extends FragmentActivity {
         for(ViewPagerFragment f : fragments) {
             f.newRotationData(new RotationDataEvent(deltaTime, rotationSpeed, speed, distance));
         }
+    }
+
+    public void updateSpeed(float rotationSpeed) {
+        updateRealSpeed((float)Common.rotationalSpeedToSpeed(rotationSpeed, diameter), rotationSpeed);
     }
 }
