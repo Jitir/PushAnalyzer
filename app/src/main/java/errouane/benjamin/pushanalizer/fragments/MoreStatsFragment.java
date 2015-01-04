@@ -3,7 +3,6 @@ package errouane.benjamin.pushanalizer.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import errouane.benjamin.pushanalizer.Common;
 import errouane.benjamin.pushanalizer.R;
@@ -31,6 +25,7 @@ import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 public class MoreStatsFragment extends ViewPagerFragment {
     private Button resetButton;
     private Button saveButton;
+    private Button pushButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +65,19 @@ public class MoreStatsFragment extends ViewPagerFragment {
             }
         });
 
+        pushButton = (Button) view.findViewById(R.id.pushButton);
+        pushButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPush();
+            }
+        });
+
         return view;
+    }
+
+    private void addPush() {
+        Session.getInstance().addPush();
     }
 
     private void writeStringToFile(String filename, String content) {
@@ -106,7 +113,7 @@ public class MoreStatsFragment extends ViewPagerFragment {
                         String value = editText.getText().toString();
                         if (!value.isEmpty()) {
                             writeStringToFile(value + ".nfo", Session.getInstance().toReadableString());
-                            writeStringToFile(value + ".ext", Session.getInstance().toBinaryString());
+                            writeStringToFile(value + ".ext", Session.getInstance().toSimpleString());
                         }
                     }
                 })

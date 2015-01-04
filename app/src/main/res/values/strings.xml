@@ -15,5 +15,6 @@
     <string name="save">Save</string>
     <string name="sd_card_unavailable">The SD-Card is not available!</string>
     <string name="load_data">Load</string>
+    <string name="push_name">Push!</string>
 
 </resources>

@@ -43,7 +43,6 @@ public class MainTabbedActivity extends FragmentActivity {
     private float diameter;
     private UUID PushAnalyzerUuid = UUID.fromString("00002000-0000-1000-8000-00805f9b34fb");
     private long lastDataTime = 0;
-    private Session session = Session.getInstance();
     private Simulator simulator;
 
     private ViewPagerFragment[] fragments;
@@ -119,7 +118,7 @@ public class MainTabbedActivity extends FragmentActivity {
                     accelerometer[1] = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 2);
                     accelerometer[2] = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 4);
                     int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 6);
-                    updateSpeed(data);
+                    updateSpeed(data, accelerometer);
                 }
             });
             gatt.discoverServices();
@@ -188,7 +187,7 @@ public class MainTabbedActivity extends FragmentActivity {
         diameter = Float.parseFloat(PreferenceManager.getDefaultSharedPreferences(this).getString("wheelDiameter", "60"));
     }
 
-    public void updateRealSpeed(float speed, float rotationSpeed) {
+    public void updateRealSpeed(float speed, float rotationSpeed, int[] accelerometer) {
         float deltaTime = 0;
         long now = System.currentTimeMillis();
         if(lastDataTime != 0) {
@@ -199,15 +198,15 @@ public class MainTabbedActivity extends FragmentActivity {
 
         float distance = deltaTime * speed / 1200f;
 
-        session.addDistance(distance);
-        session.addDuration(deltaTime);
+        Session.getInstance().addDistance(distance);
+        Session.getInstance().addValues(deltaTime, speed, accelerometer);
 
         for(ViewPagerFragment f : fragments) {
             f.newRotationData(new RotationDataEvent(deltaTime, rotationSpeed, speed, distance));
         }
     }
 
-    public void updateSpeed(float rotationSpeed) {
-        updateRealSpeed((float)Common.rotationalSpeedToSpeed(rotationSpeed, diameter), rotationSpeed);
+    public void updateSpeed(float rotationSpeed, int[] accelerometer) {
+        updateRealSpeed((float)Common.rotationalSpeedToSpeed(rotationSpeed, diameter), rotationSpeed, accelerometer);
     }
 }

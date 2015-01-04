@@ -43,8 +43,6 @@ public class GraphsFragment extends ViewPagerFragment {
 
     @Override
     public void newRotationData(RotationDataEvent event) {
-        session.getTimes().add(time);
-        session.getSpeeds().add(event.getSpeed());
         time += event.getDeltaTime();
         if(plot != null)
             plot.redraw();

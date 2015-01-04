@@ -2,7 +2,8 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical" android:layout_width="match_parent"
-android:layout_height="match_parent">
+android:layout_height="match_parent"
+    android:weightSum="1">
 
     <Button
         android:layout_width="wrap_content"
@@ -17,4 +18,19 @@ android:layout_height="match_parent">
         android:text="@string/save"
         android:id="@+id/saveButton"
         android:layout_gravity="center_horizontal" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1.12">
+
+        <Button
+            android:layout_width="176dp"
+            android:layout_height="159dp"
+            android:text="@string/push_name"
+            android:id="@+id/pushButton"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
 </LinearLayout>
