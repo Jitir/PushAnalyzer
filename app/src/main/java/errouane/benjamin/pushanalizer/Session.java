@@ -1,20 +1,23 @@
 package errouane.benjamin.pushanalizer;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Created by Benni on 07.11.2014.
  */
-public class Session {
+public class Session extends Observable {
     private float duration = 0;
     private float distance = 0;
     private List<Float> speeds = new ArrayList<Float>();
     private List<Float> times = new ArrayList<Float>();
     private List<Float> pushes = new ArrayList<Float>();
-    private List<Integer> accelerometerX = new ArrayList<Integer>();
-    private List<Integer> accelerometerY = new ArrayList<Integer>();
-    private List<Integer> accelerometerZ = new ArrayList<Integer>();
+    private List<Float> accelerometerX = new ArrayList<Float>();
+    private List<Float> accelerometerY = new ArrayList<Float>();
+    private List<Float> accelerometerZ = new ArrayList<Float>();
 
     private Session() {}
 
@@ -22,9 +25,9 @@ public class Session {
         duration += deltaTime;
         times.add(duration);
         speeds.add(speed);
-        accelerometerX.add(acc[0]);
-        accelerometerY.add(acc[1]);
-        accelerometerZ.add(acc[2]);
+        accelerometerX.add((float) ((acc[0] / Math.pow(2,15))) * 15);
+        accelerometerY.add((float) ((acc[1] / Math.pow(2,15))) * 15);
+        accelerometerZ.add((float) ((acc[2] / Math.pow(2,15))) * 15);
     }
 
     public List<Float> getTimes() {
@@ -33,10 +36,6 @@ public class Session {
 
     public List<Float> getSpeeds() {
         return speeds;
-    }
-/*
-    public List<Float> getPushes() {
-        return pushes;
     }
 
     public List<Float> getAccelerometerX() {
@@ -51,26 +50,6 @@ public class Session {
         return accelerometerZ;
     }
 
-    public float distancePerPush() {
-        return distance / (float)pushes.size();
-    }
-
-    public float averageSpeed() {
-        return distance / duration;
-    }
-
-    public float getDuration() {
-        return duration;
-    }
-
-    public float getDistance() {
-        return distance;
-    }
-
-    public int getPushesCount() {
-        return pushes.size();
-    }
-*/
     public void addDistance(float value) {
         distance += value;
     }
@@ -88,6 +67,9 @@ public class Session {
         accelerometerX.clear();
         accelerometerY.clear();
         accelerometerZ.clear();
+        hasChanged();
+        notifyObservers();
+        Log.e("SAD", ""+countObservers());
     }
 
     private static Session instance;

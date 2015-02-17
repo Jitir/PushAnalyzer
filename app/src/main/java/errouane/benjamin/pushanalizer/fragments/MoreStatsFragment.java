@@ -30,7 +30,6 @@ public class MoreStatsFragment extends ViewPagerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -122,8 +121,6 @@ public class MoreStatsFragment extends ViewPagerFragment {
                         // Do nothing.
                     }
                 }).show();
-
-
     }
 
     @Override
@@ -134,5 +131,10 @@ public class MoreStatsFragment extends ViewPagerFragment {
     @Override
     public String getDescription() {
         return "More Stats";
+    }
+
+    @Override
+    public void reset() {
+        Log.e("sad", "d");
     }
 }

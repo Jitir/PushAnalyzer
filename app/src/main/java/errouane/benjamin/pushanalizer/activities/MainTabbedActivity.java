@@ -56,7 +56,9 @@ public class MainTabbedActivity extends FragmentActivity {
         fragments[0] = new MoreStatsFragment();
         fragments[1] = new CurrentValuesFragment();
         fragments[2] = new GraphsFragment();
-
+        Session.getInstance().addObserver(fragments[0]);
+        Session.getInstance().addObserver(fragments[1]);
+        Session.getInstance().addObserver(fragments[2]);
 
         adapter = new MyPagerAdapter(getSupportFragmentManager(), fragments);
 
@@ -117,8 +119,8 @@ public class MainTabbedActivity extends FragmentActivity {
                     accelerometer[0] = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 0);
                     accelerometer[1] = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 2);
                     accelerometer[2] = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 4);
-                    int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 6);
-                    updateSpeed(data, accelerometer);
+                    int rotationalSpeed = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 6);
+                    updateSpeed(rotationalSpeed, accelerometer);
                 }
             });
             gatt.discoverServices();
@@ -134,6 +136,8 @@ public class MainTabbedActivity extends FragmentActivity {
             simulator = new Simulator(this, file);
             new Thread(simulator).start();
         }
+
+        Session.getInstance().reset();
     }
 
 
@@ -188,6 +192,7 @@ public class MainTabbedActivity extends FragmentActivity {
     }
 
     public void updateRealSpeed(float speed, float rotationSpeed, int[] accelerometer) {
+        // Calculate deltaTime in seconds
         float deltaTime = 0;
         long now = System.currentTimeMillis();
         if(lastDataTime != 0) {
@@ -196,7 +201,8 @@ public class MainTabbedActivity extends FragmentActivity {
         }
         lastDataTime = now;
 
-        float distance = deltaTime * speed / 1200f;
+        // Calculate distance (1 hour = 3600 seconds)
+        float distance = deltaTime * speed / 3600f;
 
         Session.getInstance().addDistance(distance);
         Session.getInstance().addValues(deltaTime, speed, accelerometer);
@@ -206,7 +212,7 @@ public class MainTabbedActivity extends FragmentActivity {
         }
     }
 
-    public void updateSpeed(float rotationSpeed, int[] accelerometer) {
+    public void updateSpeed(int rotationSpeed, int[] accelerometer) {
         updateRealSpeed((float)Common.rotationalSpeedToSpeed(rotationSpeed, diameter), rotationSpeed, accelerometer);
     }
 }

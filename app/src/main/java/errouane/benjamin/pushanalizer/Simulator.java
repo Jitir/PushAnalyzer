@@ -67,6 +67,9 @@ public class Simulator implements Runnable {
                 caller.updateRealSpeed(speeds.get(0), 0, acc);
                 times.remove(0);
                 speeds.remove(0);
+                accelerometerX.remove(0);
+                accelerometerY.remove(0);
+                accelerometerZ.remove(0);
             }
         }
     }

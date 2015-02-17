@@ -22,6 +22,15 @@ public class PlotSeries implements XYSeries {
             case SPEED:
                 return session.getSpeeds().size();
 
+            case ACC_X:
+                return session.getAccelerometerX().size();
+
+            case ACC_Y:
+                return session.getAccelerometerY().size();
+
+            case ACC_Z:
+                return session.getAccelerometerZ().size();
+
             default:
                 throw new RuntimeException("Illegal ValueType: " + valueType);
         }
@@ -38,6 +47,15 @@ public class PlotSeries implements XYSeries {
             case SPEED:
                 return session.getSpeeds().get(index);
 
+            case ACC_X:
+                return session.getAccelerometerX().get(index);
+
+            case ACC_Y:
+                return session.getAccelerometerY().get(index);
+
+            case ACC_Z:
+                return session.getAccelerometerZ().get(index);
+
             default:
                 throw new RuntimeException("Illegal ValueType: " + valueType);
         }
@@ -49,12 +67,24 @@ public class PlotSeries implements XYSeries {
             case SPEED:
                 return "Speed";
 
+            case ACC_X:
+                return "Accelerometer X";
+
+            case ACC_Y:
+                return "Accelerometer Y";
+
+            case ACC_Z:
+                return "Accelerometer Z";
+
             default:
                 throw new RuntimeException("Illegal ValueType: " + valueType);
         }
     }
 
     public enum ValueType {
-        SPEED
+        SPEED,
+        ACC_X,
+        ACC_Y,
+        ACC_Z
     }
 }
