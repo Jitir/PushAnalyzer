@@ -26,16 +26,16 @@ import java.util.List;
 import java.util.UUID;
 
 import errouane.benjamin.pushanalizer.Common;
-import errouane.benjamin.pushanalizer.session.Session;
-import errouane.benjamin.pushanalizer.Simulator;
-import errouane.benjamin.pushanalizer.algorithms.PushDetector;
-import errouane.benjamin.pushanalizer.fragments.ViewPagerFragment;
-import errouane.benjamin.pushanalizer.adapters.MyPagerAdapter;
 import errouane.benjamin.pushanalizer.R;
+import errouane.benjamin.pushanalizer.Simulator;
+import errouane.benjamin.pushanalizer.adapters.MyPagerAdapter;
+import errouane.benjamin.pushanalizer.algorithms.PushDetector;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 import errouane.benjamin.pushanalizer.fragments.CurrentValuesFragment;
 import errouane.benjamin.pushanalizer.fragments.GraphsFragment;
 import errouane.benjamin.pushanalizer.fragments.MoreStatsFragment;
+import errouane.benjamin.pushanalizer.fragments.ViewPagerFragment;
+import errouane.benjamin.pushanalizer.session.Session;
 
 
 public class MainTabbedActivity extends FragmentActivity {
@@ -140,7 +140,7 @@ public class MainTabbedActivity extends FragmentActivity {
 
             Uri uri = Uri.parse(filePath);
             File file = new File(uri.getPath());
-            if(file == null || !file.exists())
+            if(!file.exists())
                 finish();
 
 

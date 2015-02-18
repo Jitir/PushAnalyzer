@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import errouane.benjamin.pushanalizer.R;
-import errouane.benjamin.pushanalizer.session.Session;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
+import errouane.benjamin.pushanalizer.session.Session;
 
 
 public class CurrentValuesFragment extends ViewPagerFragment {

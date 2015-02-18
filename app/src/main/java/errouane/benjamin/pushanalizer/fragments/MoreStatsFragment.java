@@ -18,8 +18,8 @@ import java.io.PrintWriter;
 
 import errouane.benjamin.pushanalizer.Common;
 import errouane.benjamin.pushanalizer.R;
-import errouane.benjamin.pushanalizer.session.Session;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
+import errouane.benjamin.pushanalizer.session.Session;
 
 
 public class MoreStatsFragment extends ViewPagerFragment {
@@ -95,9 +95,6 @@ public class MoreStatsFragment extends ViewPagerFragment {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Log.e("PushAnalyzer", "File not found");
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("PushAnalyzer", "io exception");
         }
     }
 

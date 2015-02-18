@@ -1,13 +1,9 @@
 package errouane.benjamin.pushanalizer.algorithms;
 
-import android.util.Log;
-
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
-import errouane.benjamin.pushanalizer.session.Session;
 import errouane.benjamin.pushanalizer.activities.MainTabbedActivity;
+import errouane.benjamin.pushanalizer.session.Session;
 import errouane.benjamin.pushanalizer.session.SessionFunctions;
 
 /**
@@ -36,7 +32,7 @@ public class PushDetector {
         List<Float> acceleration = SessionFunctions.differentiate(speeds, times);
         acceleration = SessionFunctions.clamp(acceleration, -30, 30);
 
-        float value = SessionFunctions.average(acceleration, 3);
+        float value = SessionFunctions.average(acceleration, movingAverageSize);
         if(value > PUSH_THRESHOLD) {
             if(!wasPushing) {
                 wasPushing = true;
