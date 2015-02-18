@@ -1,4 +1,4 @@
-package errouane.benjamin.pushanalizer;
+package errouane.benjamin.pushanalizer.session;
 
 import android.util.Log;
 
@@ -12,6 +12,8 @@ import java.util.Observable;
 public class Session extends Observable {
     private float duration = 0;
     private float distance = 0;
+    private float topSpeed = 0;
+    private float distancePerPush = 0;
     private List<Float> speeds = new ArrayList<Float>();
     private List<Float> times = new ArrayList<Float>();
     private List<Float> pushes = new ArrayList<Float>();
@@ -21,13 +23,40 @@ public class Session extends Observable {
 
     private Session() {}
 
-    public void addValues(float deltaTime, float speed, int[] acc) {
+    public void addValues(float deltaTime, float speed, int[] acc, float distance) {
         duration += deltaTime;
         times.add(duration);
         speeds.add(speed);
+        this.distance += distance;
+        if(speed > topSpeed) {
+            topSpeed = speed;
+        }
+        if(!pushes.isEmpty())
+            distancePerPush = this.distance * 1000f / (float)pushes.size();
+
         accelerometerX.add((float) ((acc[0] / Math.pow(2,15))) * 15);
         accelerometerY.add((float) ((acc[1] / Math.pow(2,15))) * 15);
         accelerometerZ.add((float) ((acc[2] / Math.pow(2,15))) * 15);
+    }
+
+    public List<Float> getPushes() {
+        return pushes;
+    }
+
+    public float getTopSpeed() {
+        return topSpeed;
+    }
+
+    public float getDistancePerPush() {
+        return distancePerPush;
+    }
+
+    public float getDistance() {
+        return distance;
+    }
+
+    public float getDuration() {
+        return duration;
     }
 
     public List<Float> getTimes() {
@@ -50,10 +79,6 @@ public class Session extends Observable {
         return accelerometerZ;
     }
 
-    public void addDistance(float value) {
-        distance += value;
-    }
-
     public void addPush() {
         pushes.add(times.get(times.size() - 1));
     }
@@ -61,6 +86,8 @@ public class Session extends Observable {
     public void reset() {
         duration = 0;
         distance = 0;
+        topSpeed = 0;
+        distancePerPush = 0;
         pushes.clear();
         speeds.clear();
         times.clear();
@@ -69,7 +96,6 @@ public class Session extends Observable {
         accelerometerZ.clear();
         hasChanged();
         notifyObservers();
-        Log.e("SAD", ""+countObservers());
     }
 
     private static Session instance;

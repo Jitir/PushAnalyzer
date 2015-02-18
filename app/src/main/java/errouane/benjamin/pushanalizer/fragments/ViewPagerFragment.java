@@ -1,13 +1,11 @@
 package errouane.benjamin.pushanalizer.fragments;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import java.util.Observable;
 import java.util.Observer;
 
-import errouane.benjamin.pushanalizer.Session;
-import errouane.benjamin.pushanalizer.activities.MainTabbedActivity;
+import errouane.benjamin.pushanalizer.session.Session;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataListener;
 
 /**

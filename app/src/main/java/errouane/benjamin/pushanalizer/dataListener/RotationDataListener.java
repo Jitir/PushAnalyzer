@@ -5,4 +5,5 @@ package errouane.benjamin.pushanalizer.dataListener;
  */
 public interface RotationDataListener {
     public void newRotationData(RotationDataEvent event);
+    public void newPush();
 }

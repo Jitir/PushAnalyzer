@@ -2,24 +2,18 @@ package errouane.benjamin.pushanalizer.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import errouane.benjamin.pushanalizer.R;
-import errouane.benjamin.pushanalizer.Session;
+import errouane.benjamin.pushanalizer.session.Session;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 
 
 public class CurrentValuesFragment extends ViewPagerFragment {
-    private TextView speedText, distanceText, topSpeedText;
-    private float distance = 0;
-    private float topSpeed = 0;
+    private TextView speedText, distanceText, topSpeedText, pushesTextView, distancePerPushText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +26,8 @@ public class CurrentValuesFragment extends ViewPagerFragment {
         topSpeedText = (TextView) view.findViewById(R.id.topSpeedTextView);
         speedText = (TextView) view.findViewById(R.id.speedTextView);
         distanceText = (TextView) view.findViewById(R.id.distanceTextView);
+        pushesTextView = (TextView) view.findViewById(R.id.pushesTextView);
+        distancePerPushText = (TextView) view.findViewById(R.id.distancePerPushTextView);
         return view;
     }
 
@@ -41,25 +37,32 @@ public class CurrentValuesFragment extends ViewPagerFragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(event.getSpeed() > topSpeed) {
-                        topSpeed = event.getSpeed();
-                        topSpeedText.setText(Float.toString((int)(topSpeed * 10) / 10f));
-                    }
-
-                    speedText.setText(Float.toString((int)(event.getSpeed() * 10) / 10f));
-                    distance += event.getDistance();
-                    distanceText.setText(Integer.toString((int)(distance * 1000f)));
+                    updateTextViews(event.getSpeed());
                 }
             });
         }
     }
 
     @Override
+    public void newPush() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pushesTextView.setText(Integer.toString(Session.getInstance().getPushes().size()));
+            }
+        });
+    }
+
+    private void updateTextViews(float speed) {
+        topSpeedText.setText(Float.toString((int)(Session.getInstance().getTopSpeed() * 10) / 10f));
+        speedText.setText(Float.toString((int)(speed * 10) / 10f));
+        distanceText.setText(Integer.toString((int)(Session.getInstance().getDistance() * 1000f)));
+        distancePerPushText.setText(Float.toString((int)(Session.getInstance().getDistancePerPush() * 10) / 10f));
+    }
+
+    @Override
     public void reset() {
-        distance = 0;
-        distanceText.setText(Integer.toString((int)(distance * 1000f)));
-        topSpeed = 0;
-        topSpeedText.setText(Float.toString((int)(topSpeed * 10) / 10f));
+        updateTextViews(0);
     }
 
     @Override

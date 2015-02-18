@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 
 import errouane.benjamin.pushanalizer.Common;
 import errouane.benjamin.pushanalizer.R;
-import errouane.benjamin.pushanalizer.Session;
+import errouane.benjamin.pushanalizer.session.Session;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 
 
@@ -125,6 +125,11 @@ public class MoreStatsFragment extends ViewPagerFragment {
 
     @Override
     public void newRotationData(RotationDataEvent event) {
+
+    }
+
+    @Override
+    public void newPush() {
 
     }
 

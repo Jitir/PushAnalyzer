@@ -2,7 +2,7 @@ package errouane.benjamin.pushanalizer.fragments.graph;
 
 import com.androidplot.xy.XYSeries;
 
-import errouane.benjamin.pushanalizer.Session;
+import errouane.benjamin.pushanalizer.session.Session;
 
 /**
  * Created by Benni on 08.11.2014.

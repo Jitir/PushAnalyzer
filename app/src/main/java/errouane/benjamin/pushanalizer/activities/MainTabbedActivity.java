@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -25,8 +26,9 @@ import java.util.List;
 import java.util.UUID;
 
 import errouane.benjamin.pushanalizer.Common;
-import errouane.benjamin.pushanalizer.Session;
+import errouane.benjamin.pushanalizer.session.Session;
 import errouane.benjamin.pushanalizer.Simulator;
+import errouane.benjamin.pushanalizer.algorithms.PushDetector;
 import errouane.benjamin.pushanalizer.fragments.ViewPagerFragment;
 import errouane.benjamin.pushanalizer.adapters.MyPagerAdapter;
 import errouane.benjamin.pushanalizer.R;
@@ -45,12 +47,21 @@ public class MainTabbedActivity extends FragmentActivity {
     private long lastDataTime = 0;
     private Simulator simulator;
 
+    private PushDetector pushDetector;
+    private Vibrator vibrator;
+
     private ViewPagerFragment[] fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tabbed);
+
+        pushDetector = new PushDetector(this, 3);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        if(!vibrator.hasVibrator()) {
+            vibrator = null;
+        }
 
         fragments = new ViewPagerFragment[3];
         fragments[0] = new MoreStatsFragment();
@@ -204,8 +215,9 @@ public class MainTabbedActivity extends FragmentActivity {
         // Calculate distance (1 hour = 3600 seconds)
         float distance = deltaTime * speed / 3600f;
 
-        Session.getInstance().addDistance(distance);
-        Session.getInstance().addValues(deltaTime, speed, accelerometer);
+        Session.getInstance().addValues(deltaTime, speed, accelerometer, distance);
+
+        pushDetector.update();
 
         for(ViewPagerFragment f : fragments) {
             f.newRotationData(new RotationDataEvent(deltaTime, rotationSpeed, speed, distance));
@@ -214,5 +226,16 @@ public class MainTabbedActivity extends FragmentActivity {
 
     public void updateSpeed(int rotationSpeed, int[] accelerometer) {
         updateRealSpeed((float)Common.rotationalSpeedToSpeed(rotationSpeed, diameter), rotationSpeed, accelerometer);
+    }
+
+    public void pushRegistered() {
+        Session.getInstance().addPush();
+        if(vibrator != null) {
+            vibrator.vibrate(100);
+        }
+
+        for(ViewPagerFragment f : fragments) {
+            f.newPush();
+        }
     }
 }

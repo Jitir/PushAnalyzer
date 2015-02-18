@@ -3,6 +3,8 @@ package errouane.benjamin.pushanalizer;
 import java.util.ArrayList;
 import java.util.List;
 
+import errouane.benjamin.pushanalizer.session.Session;
+
 /**
  * Created by Benni on 07.11.2014.
  */

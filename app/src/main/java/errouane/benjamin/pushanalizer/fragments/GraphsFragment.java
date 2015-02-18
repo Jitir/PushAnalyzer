@@ -3,21 +3,15 @@ package errouane.benjamin.pushanalizer.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.XValueMarker;
 import com.androidplot.xy.XYPlot;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import errouane.benjamin.pushanalizer.R;
-import errouane.benjamin.pushanalizer.Session;
-import errouane.benjamin.pushanalizer.activities.MainTabbedActivity;
+import errouane.benjamin.pushanalizer.session.Session;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 import errouane.benjamin.pushanalizer.fragments.graph.PlotSeries;
 
@@ -52,6 +46,11 @@ public class GraphsFragment extends ViewPagerFragment {
     public void newRotationData(RotationDataEvent event) {
         if(plot != null)
             plot.redraw();
+    }
+
+    @Override
+    public void newPush() {
+
     }
 
     @Override
