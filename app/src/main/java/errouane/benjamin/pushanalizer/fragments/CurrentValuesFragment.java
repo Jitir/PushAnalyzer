@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import errouane.benjamin.pushanalizer.R;
+import errouane.benjamin.pushanalizer.algorithms.BrakeDetector;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 import errouane.benjamin.pushanalizer.session.Session;
 
@@ -51,6 +52,11 @@ public class CurrentValuesFragment extends ViewPagerFragment {
                 pushesTextView.setText(Integer.toString(Session.getInstance().getPushes().size()));
             }
         });
+    }
+
+    @Override
+    public void newBrake(BrakeDetector.BrakeData results) {
+
     }
 
     private void updateTextViews(float speed) {

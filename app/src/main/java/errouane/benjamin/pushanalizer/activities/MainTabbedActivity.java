@@ -29,6 +29,7 @@ import errouane.benjamin.pushanalizer.Common;
 import errouane.benjamin.pushanalizer.R;
 import errouane.benjamin.pushanalizer.Simulator;
 import errouane.benjamin.pushanalizer.adapters.MyPagerAdapter;
+import errouane.benjamin.pushanalizer.algorithms.BrakeDetector;
 import errouane.benjamin.pushanalizer.algorithms.PushDetector;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 import errouane.benjamin.pushanalizer.fragments.CurrentValuesFragment;
@@ -48,6 +49,7 @@ public class MainTabbedActivity extends FragmentActivity {
     private Simulator simulator;
 
     private PushDetector pushDetector;
+    private BrakeDetector brakeDetector;
     private Vibrator vibrator;
 
     private ViewPagerFragment[] fragments;
@@ -58,6 +60,7 @@ public class MainTabbedActivity extends FragmentActivity {
         setContentView(R.layout.activity_main_tabbed);
 
         pushDetector = new PushDetector(this, 3);
+        brakeDetector = new BrakeDetector(this, 5);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         if(!vibrator.hasVibrator()) {
             vibrator = null;
@@ -218,6 +221,7 @@ public class MainTabbedActivity extends FragmentActivity {
         Session.getInstance().addValues(deltaTime, speed, accelerometer, distance);
 
         pushDetector.update();
+        brakeDetector.update();
 
         for(ViewPagerFragment f : fragments) {
             f.newRotationData(new RotationDataEvent(deltaTime, rotationSpeed, speed, distance));
@@ -228,10 +232,18 @@ public class MainTabbedActivity extends FragmentActivity {
         updateRealSpeed((float)Common.rotationalSpeedToSpeed(rotationSpeed, diameter), rotationSpeed, accelerometer);
     }
 
+    public void brakeRegistered(BrakeDetector.BrakeData results) {
+        Log.e("", results.toString());
+
+        for(ViewPagerFragment f : fragments) {
+            f.newBrake(null);
+        }
+    }
+
     public void pushRegistered() {
         Session.getInstance().addPush();
         if(vibrator != null) {
-            vibrator.vibrate(100);
+            //vibrator.vibrate(100);
         }
 
         for(ViewPagerFragment f : fragments) {

@@ -11,6 +11,7 @@ import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.XYPlot;
 
 import errouane.benjamin.pushanalizer.R;
+import errouane.benjamin.pushanalizer.algorithms.BrakeDetector;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 import errouane.benjamin.pushanalizer.fragments.graph.PlotSeries;
 import errouane.benjamin.pushanalizer.session.Session;
@@ -50,6 +51,11 @@ public class GraphsFragment extends ViewPagerFragment {
 
     @Override
     public void newPush() {
+
+    }
+
+    @Override
+    public void newBrake(BrakeDetector.BrakeData results) {
 
     }
 

@@ -13,11 +13,11 @@ import android.widget.EditText;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 import errouane.benjamin.pushanalizer.Common;
 import errouane.benjamin.pushanalizer.R;
+import errouane.benjamin.pushanalizer.algorithms.BrakeDetector;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
 import errouane.benjamin.pushanalizer.session.Session;
 
@@ -127,6 +127,11 @@ public class MoreStatsFragment extends ViewPagerFragment {
 
     @Override
     public void newPush() {
+
+    }
+
+    @Override
+    public void newBrake(BrakeDetector.BrakeData results) {
 
     }
 
