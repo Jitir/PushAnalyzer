@@ -1,8 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-        android:key="wheelDiameter"
-        android:title="Wheel Diameter"
+    <errouane.benjamin.pushanalizer.settings.WheelDiameterSetting
+        android:key="@string/prefWheelDiameter"
         android:defaultValue="60"
-        android:selectAllOnFocus="true"
-        android:inputType="number"/>
+        android:title="Wheel Diameter"
+        />
 </PreferenceScreen>

@@ -202,7 +202,7 @@ public class MainTabbedActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        diameter = Float.parseFloat(PreferenceManager.getDefaultSharedPreferences(this).getString("wheelDiameter", "60"));
+        diameter = PreferenceManager.getDefaultSharedPreferences(this).getFloat("wheelDiameter", 60);
     }
 
     public void updateRealSpeed(float speed, float rotationSpeed, int[] accelerometer) {
@@ -233,7 +233,7 @@ public class MainTabbedActivity extends FragmentActivity {
     }
 
     public void brakeRegistered(BrakeDetector.BrakeData results) {
-        Log.e("", results.toString());
+        //Log.e("", results.toString());
 
         for(ViewPagerFragment f : fragments) {
             f.newBrake(null);

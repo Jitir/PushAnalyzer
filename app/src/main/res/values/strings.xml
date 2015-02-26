@@ -17,4 +17,6 @@
     <string name="load_data">Load</string>
     <string name="push_name">Push!</string>
 
+    <string name="prefWheelDiameter">wheelDiameter</string>
+
 </resources>
