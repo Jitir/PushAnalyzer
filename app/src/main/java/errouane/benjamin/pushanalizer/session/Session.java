@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import errouane.benjamin.pushanalizer.algorithms.BrakeDetector;
+
 /**
  * Created by Benni on 07.11.2014.
  */
@@ -18,6 +20,7 @@ public class Session extends Observable {
     private List<Float> accelerometerX = new ArrayList<Float>();
     private List<Float> accelerometerY = new ArrayList<Float>();
     private List<Float> accelerometerZ = new ArrayList<Float>();
+    private List<BrakeDetector.BrakeData> brakes = new ArrayList<BrakeDetector.BrakeData>();
 
     private Session() {}
 
@@ -81,6 +84,10 @@ public class Session extends Observable {
         pushes.add(times.get(times.size() - 1));
     }
 
+    public List<BrakeDetector.BrakeData> getBrakes() {
+        return brakes;
+    }
+
     public void reset() {
         duration = 0;
         distance = 0;
@@ -92,6 +99,7 @@ public class Session extends Observable {
         accelerometerX.clear();
         accelerometerY.clear();
         accelerometerZ.clear();
+        brakes.clear();
         hasChanged();
         notifyObservers();
     }

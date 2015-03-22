@@ -103,7 +103,7 @@ public class BrakeDetector {
         private float averageDeceleration;
 
         public BrakeData(float distance, float startSpeed, float endSpeed, float averageDeceleration) {
-            this.distance = distance / 1000f;
+            this.distance = distance;
             this.startSpeed = startSpeed;
             this.endSpeed = endSpeed;
             this.averageDeceleration = averageDeceleration;

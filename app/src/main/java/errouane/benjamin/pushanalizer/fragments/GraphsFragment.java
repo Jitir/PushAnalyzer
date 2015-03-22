@@ -37,7 +37,7 @@ public class GraphsFragment extends ViewPagerFragment {
         accZSeries = new PlotSeries(Session.getInstance(), PlotSeries.ValueType.ACC_Z);
 
         plot.addSeries(speedSeries, new LineAndPointFormatter(Color.YELLOW, Color.argb(0,0,0,0), Color.argb(0,0,0,0), null));
-        plot.addSeries(accXSeries, new LineAndPointFormatter(Color.RED, Color.argb(0,0,0,0), Color.argb(0,0,0,0), null));
+        //plot.addSeries(accXSeries, new LineAndPointFormatter(Color.RED, Color.argb(0,0,0,0), Color.argb(0,0,0,0), null));
         //plot.addSeries(accYSeries, new LineAndPointFormatter(Color.GREEN, Color.argb(0,0,0,0), Color.argb(0,0,0,0), null));
         //plot.addSeries(accZSeries, new LineAndPointFormatter(Color.BLUE, Color.argb(0,0,0,0), Color.argb(0,0,0,0), null));
         return view;
@@ -78,6 +78,6 @@ public class GraphsFragment extends ViewPagerFragment {
         accZSeries = new PlotSeries(Session.getInstance(), PlotSeries.ValueType.ACC_Z);
 
         plot.addSeries(speedSeries, new LineAndPointFormatter(Color.YELLOW, Color.argb(0,0,0,0), Color.argb(0,0,0,0), null));
-        plot.addSeries(accXSeries, new LineAndPointFormatter(Color.RED, Color.argb(0,0,0,0), Color.argb(0,0,0,0), null));
+        //plot.addSeries(accXSeries, new LineAndPointFormatter(Color.RED, Color.argb(0,0,0,0), Color.argb(0,0,0,0), null));
     }
 }

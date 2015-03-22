@@ -32,6 +32,7 @@ import errouane.benjamin.pushanalizer.adapters.MyPagerAdapter;
 import errouane.benjamin.pushanalizer.algorithms.BrakeDetector;
 import errouane.benjamin.pushanalizer.algorithms.PushDetector;
 import errouane.benjamin.pushanalizer.dataListener.RotationDataEvent;
+import errouane.benjamin.pushanalizer.fragments.BrakeStatsFragment;
 import errouane.benjamin.pushanalizer.fragments.CurrentValuesFragment;
 import errouane.benjamin.pushanalizer.fragments.GraphsFragment;
 import errouane.benjamin.pushanalizer.fragments.MoreStatsFragment;
@@ -66,13 +67,16 @@ public class MainTabbedActivity extends FragmentActivity {
             vibrator = null;
         }
 
-        fragments = new ViewPagerFragment[3];
+        fragments = new ViewPagerFragment[4];
         fragments[0] = new MoreStatsFragment();
-        fragments[1] = new CurrentValuesFragment();
-        fragments[2] = new GraphsFragment();
+        fragments[1] = new BrakeStatsFragment();
+        fragments[2] = new CurrentValuesFragment();
+        fragments[3] = new GraphsFragment();
+
         Session.getInstance().addObserver(fragments[0]);
         Session.getInstance().addObserver(fragments[1]);
         Session.getInstance().addObserver(fragments[2]);
+        Session.getInstance().addObserver(fragments[3]);
 
         adapter = new MyPagerAdapter(getSupportFragmentManager(), fragments);
 
@@ -233,10 +237,10 @@ public class MainTabbedActivity extends FragmentActivity {
     }
 
     public void brakeRegistered(BrakeDetector.BrakeData results) {
-        //Log.e("", results.toString());
+        Session.getInstance().getBrakes().add(results);
 
         for(ViewPagerFragment f : fragments) {
-            f.newBrake(null);
+            f.newBrake(results);
         }
     }
 

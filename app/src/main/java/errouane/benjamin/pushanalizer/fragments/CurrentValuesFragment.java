@@ -46,12 +46,14 @@ public class CurrentValuesFragment extends ViewPagerFragment {
 
     @Override
     public void newPush() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pushesTextView.setText(Integer.toString(Session.getInstance().getPushes().size()));
-            }
-        });
+        if(getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pushesTextView.setText(Integer.toString(Session.getInstance().getPushes().size()));
+                }
+            });
+        }
     }
 
     @Override
