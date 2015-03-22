@@ -2,6 +2,7 @@ package errouane.benjamin.pushanalizer.algorithms;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import errouane.benjamin.pushanalizer.activities.MainTabbedActivity;
@@ -16,8 +17,9 @@ public class BrakeDetector {
     private MainTabbedActivity mainTabbedActivity;
     private final float BRAKE_THRESHOLD = -7f;
     private float startDistance;
-    private float decelerationSum = 0;
-    private int brakeLength = 0;
+    //private float decelerationSum = 0;
+    private List<Float> decelerations = new ArrayList<Float>();
+    //private int brakeLength = 0;
 
     public BrakeDetector(MainTabbedActivity mainTabbedActivity, int movingAverageSize) {
         this.mainTabbedActivity = mainTabbedActivity;
@@ -28,35 +30,51 @@ public class BrakeDetector {
         BrakeValues values = isBraking();
         switch(values.type) {
             case START:
-                brakeLength++;
-                decelerationSum = values.deceleration;
+                decelerations.add(values.deceleration);
                 startDistance = Session.getInstance().getDistance();
                 break;
 
             case BRAKING:
-                brakeLength++;
-                decelerationSum += values.deceleration;
+                decelerations.add(values.deceleration);
                 break;
 
             case END:
-                if(brakeLength > 5) {
+                if(decelerations.size() > 5) {
                     float distance = Session.getInstance().getDistance() - startDistance;
-                    List<Float> speeds = SessionFunctions.getLastElements(Session.getInstance().getSpeeds(), brakeLength + 2);
+                    List<Float> speeds = SessionFunctions.getLastElements(Session.getInstance().getSpeeds(), decelerations.size() + 2);
 
-                    BrakeData data = new BrakeData(distance, speeds.get(0), speeds.get(speeds.size() - 1), decelerationSum / (float)brakeLength);
+                    BrakeData data = new BrakeData(distance, speeds.get(0), speeds.get(speeds.size() - 1), average(decelerations), variance(decelerations));
                     mainTabbedActivity.brakeRegistered(data);
                 }
-                brakeLength = 0;
+                decelerations.clear();
                 break;
 
             case NONE:
-
                 break;
         }
     }
 
+    private float average(List<Float> list) {
+        float sum = 0;
+        for(float f : list) {
+            sum += f;
+        }
+        return sum / (float)list.size();
+    }
+
+    private float variance(List<Float> list) {
+        float average = average(list);
+
+        List<Float> quads = new ArrayList<Float>();
+        for(float f : list) {
+            float value = (float) Math.pow(f - average, 2);
+            quads.add(value);
+        }
+        return average(quads);
+    }
+
     private boolean isBraking(float deceleration) {
-        if(brakeLength > 0) {
+        if(!decelerations.isEmpty()) {
             if(deceleration < 0) {
                 return true;
             }
@@ -78,13 +96,13 @@ public class BrakeDetector {
         float deceleration = SessionFunctions.average(acceleration, movingAverageSize);
 
         if(isBraking(deceleration)) {
-            if (brakeLength > 0) {
+            if (!decelerations.isEmpty()) {
                 return new BrakeValues(BrakeEventType.BRAKING, deceleration);
             } else {
                 return new BrakeValues(BrakeEventType.START, deceleration);
             }
         } else {
-            if(brakeLength > 0) {
+            if(!decelerations.isEmpty()) {
                 return new BrakeValues(BrakeEventType.END, deceleration);
             } else {
                 return new BrakeValues(BrakeEventType.NONE, deceleration);
@@ -101,12 +119,18 @@ public class BrakeDetector {
         private float startSpeed;
         private float endSpeed;
         private float averageDeceleration;
+        private float brakeVariance;
 
-        public BrakeData(float distance, float startSpeed, float endSpeed, float averageDeceleration) {
+        public BrakeData(float distance, float startSpeed, float endSpeed, float averageDeceleration, float brakeVariance) {
             this.distance = distance;
             this.startSpeed = startSpeed;
             this.endSpeed = endSpeed;
             this.averageDeceleration = averageDeceleration;
+            this.brakeVariance = brakeVariance;
+        }
+
+        public float getBrakeVariance() {
+            return brakeVariance;
         }
 
         public float getDistance() {

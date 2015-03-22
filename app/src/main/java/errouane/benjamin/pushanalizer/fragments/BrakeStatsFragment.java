@@ -51,11 +51,10 @@ public class BrakeStatsFragment extends ViewPagerFragment {
 
     @Override
     public void newBrake(BrakeDetector.BrakeData results) {
-        final String s = String.format("\n\nAverage Receleration: %.1f\nDistance: %.1f\nStart Speed: %.1f\nEnd Speed: %.1f",
+        final String s = String.format("\n\nAverage Deceleration: %.1f\nDistance: %.1f\nVariance: %.1f",
                 results.getAverageDeceleration(),
                 results.getDistance()*1000f,
-                results.getStartSpeed(),
-                results.getEndSpeed());
+                results.getBrakeVariance());
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
