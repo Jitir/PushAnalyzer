@@ -4,11 +4,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import errouane.benjamin.pushanalizer.R;
 import errouane.benjamin.pushanalizer.algorithms.BrakeDetector;
@@ -20,6 +24,7 @@ import errouane.benjamin.pushanalizer.session.Session;
  */
 public class BrakeStatsFragment extends ViewPagerFragment {
     private TextView text;
+    private List<BrakeDetector.BrakeData> brakes = new ArrayList<BrakeDetector.BrakeData>();
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_brake_stats, container, false);
@@ -31,7 +36,20 @@ public class BrakeStatsFragment extends ViewPagerFragment {
 
     @Override
     public void reset() {
-        text.setText("");
+        brakes.clear();
+        updateText();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateText();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("asd", "STOP");
     }
 
     @Override
@@ -51,14 +69,23 @@ public class BrakeStatsFragment extends ViewPagerFragment {
 
     @Override
     public void newBrake(BrakeDetector.BrakeData results) {
-        final String s = String.format("\n\nAverage Deceleration: %.1f\nDistance: %.1f\nVariance: %.1f",
-                results.getAverageDeceleration(),
-                results.getDistance()*1000f,
-                results.getBrakeVariance());
+        brakes.add(results);
+        updateText();
+    }
 
+    private void updateText() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                StringBuilder b = new StringBuilder();
+                for(BrakeDetector.BrakeData brake : brakes) {
+                    b.append(String.format("\n\nAverage Deceleration: %.1f\nDistance: %.1f\nVariance: %.1f",
+                            brake.getAverageDeceleration(),
+                            brake.getDistance()*1000f,
+                            brake.getBrakeVariance()));
+                }
+                final String s = b.toString();
+
                 text.setText(text.getText() + s);
             }
         });

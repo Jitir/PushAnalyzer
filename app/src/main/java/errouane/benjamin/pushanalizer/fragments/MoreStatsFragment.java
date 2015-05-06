@@ -137,11 +137,9 @@ public class MoreStatsFragment extends ViewPagerFragment {
 
     @Override
     public String getDescription() {
-        return "More Stats";
+        return "More";
     }
 
     @Override
-    public void reset() {
-        Log.e("sad", "d");
-    }
+    public void reset() {}
 }
